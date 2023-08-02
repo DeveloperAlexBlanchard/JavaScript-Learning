@@ -151,10 +151,199 @@ const prompt = require("prompt-sync")({ sigint: true });
 // };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// // Higher Order Functions
+// CLOSURES
+
+// A closure makes a function remember all the variables that existed at the function's return function
+
+// [[]] in console means the variable is an internal property that cannot be accessed from code
+
+// passengerCount is only read the first time the function is called
+// After that, whenever secureBooking is called, it only does code inside return function
+// const secureBooking = function () {
+//   let passengerCount = 0;
+
+//   return function () {
+//     passengerCount++;
+//     console.log(`${passengerCount} passengers`);
+//   };
+// };
+
+// const booker = secureBooking();
+// booker();
+// booker();
+// booker();
+// console.dir(booker);
+
+// let f;
+
+// const g = function () {
+//   const a = 23;
+//   f = function () {
+//     console.log(a * 2);
+//   };
+// };
+
+// const h = function () {
+//   const b = 777;
+//   f = function () {
+//     console.log(b * 2);
+//   };
+// };
+
+// g();
+// f();
+
+// Re-assigning f function
+// h();
+// f();
+
+// Example 2
+// const boardPassengers = function (n, wait) {
+//   const perGroup = n / 3;
+//   setTimeout(function () {
+//     console.log(`We are now boarding all ${n} passengers`);
+//     console.log(`There are 3 groups, each with ${perGroup} passengers`);
+//   }, wait * 1000);
+
+//   console.log(`Will start boarding in ${wait} seconds`);
+// };
+
+// boardPassengers(180, 5);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Immediately Invoked Function Expressions (IIFE)
+
+// WRONG
+// const runOnce = function() {
+//   console.log('This will never run again')
+// }
+// runOnce();
+
+// RIGHT
+// Wrap Function in paranthesis to run only once, NOT saving it to a variable
+// (); at the end calls to the console
+// (function () {
+//   console.log("This will never run again");
+// })();
+
+// Also works for Arrow Function
+// (() => console.log("This will never run again"));
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Manually set "This" keyword
+
+// const southwest = {
+//   airline: "SouthWest",
+//   iataCode: "SW",
+//   bookings: [],
+// Below is the new way, old way was - book: function() {}
+//   book(flightNum, name) {
+//     console.log(
+//       `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+//     );
+//     this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+//   },
+// };
+
+// southwest.book(239, "Alex");
+// southwest.book(635, "John Smith");
+
+// const delta = {
+//   airline: "Delta Airlines",
+//   iataCode: "DA",
+//   bookings: [],
+// };
+
+// Possible because JavaScript has first class functions, so we can take this function value (book)
+// Then store it into a new variable (const book)
+// const book = southwest.book;
+
+// Does NOT work because of this method
+// console.log(book(23, "Sarah Williams"));
+
+// DOES work with this method
+// Call method, then delta being the first in, allows us to manually set the "this" function to what we want to call
+// (We set this method from southwest to delta)
+// book.call(delta, 23, "Sarah Williams");
+// console.log(delta);
+// book.call(southwest, 239, "Mary Cooper");
+// console.log(southwest);
+
+// Apply Method, no longer used as much, now replaced with call function as below
+// const flightData = [583, "George Cooper"];
+// book.apply(delta, flightData)
+// console.log(delta)
+
+// Call method replaces Apply method in modern javascript
+// book.call(delta, ...flightData);
+// console.log(delta);
+
+// Bind method
+// Does not immediately call a function but rather returns a
+// new function where "this" keyword is set to whatever value we pass into bind
+// const bookSW = book.bind(southwest);
+// const bookDA = book.bind(delta);
+// bookSW(23, "Steven Williams");
+// bookDA(34, "Mary Jinkers");
+
+// Book function needed 2 inputs, but now it only needs 1 because we are presetting the "flightNum" to always be 23
+// const bookSW23 = book.bind(southwest, 23);
+// bookSW23("Alex Blanchard");
+// bookSW23("Martha Cooper");
+
+// With Event Listeners
+// southwest.planes = 300;
+// southwest.buyPlane = function() {
+//   console.log(this)
+//   // In HTML, when pressing the "buy new plane" button, add one
+//   this.planes++
+//   console.log(this.planes)
+// }
+// document.querySelector('.buy').addEventListener('click', southwest.buyPlane.bind(southwest));
+
+// Partial Application
+// const addTax = (rate, value) => value + value * rate;
+// console.log(addTax(0.1, 200));
+// Use bind function to preset tax so it is always the same
+// First argument for bind is ALWAYS "this" keyword, if "this" wasn't used in AddTax, then use null
+// const addVAT = addTax.bind(null, 0.09375);
+//Bind changes addVAT to: addVAT = value => value + value * rate;
+// console.log(addVAT(59))
+
+// EXAMPLE PROBLEM FOR FUNCTIONS RETURNING FUNCTIONS
+// const addTax = function (rate) {
+//   return function (value) {
+//     return value + value * rate;
+//   };
+// };
+
+// const addValue = addTax(0.09375);
+// console.log(addValue(239.99));
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Functions Returning Functions
+
+// This works because of closures
+// const greet = function (greeting) {
+//   return function (name) {
+//     console.log(`${greeting} ${name}`);
+//   };
+// };
+
+// const greeterHey = greet("Hey");
+// greeterHey("Alex");
+// greeterHey("Steven");
+// greet("Hello")("Alex");
+
+// Redo this but with Arrow Functions
+// const greetArr = (greeting) => (name) => console.log(`${greeting} ${name}`);
+// greetArr("Hi")("Alex");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Higher Order Functions
 
 // const oneWord = function (str) {
 //   return str.replace(/ /g, "").toLowerCase();
@@ -165,7 +354,7 @@ const prompt = require("prompt-sync")({ sigint: true });
 //   return [first.toUpperCase(), ...others].join(" ");
 // };
 
-// // Higher-Order Function
+// Higher-Order Function
 // const transformer = function (str, fn) {
 //   console.log(`Original string: ${str}`);
 //   console.log(`Transformed string: ${fn(str)}`);
