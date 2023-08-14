@@ -1,2 +1,54 @@
 # JavaScript-Learning
 Code from Udemy courses
+
+SUMMARY OF ALL ARRAY METHODS
+- $$$ TO MUTATE ORIGINAL ARRAY $$$
+  - Add to Original:
+    - .push (end)
+    - .unshift (start)
+  - Remove from Original:
+    - .pop (end)
+    - .shift (start)
+    - .splice (any)
+  - Others:
+    - .reverse
+    - .sort
+    - .fill
+- $$$ A NEW ARRAY $$$
+  - Computed from Original:
+    - .map (loop)
+  - Filtered using Condition:
+    - .filter
+  - Portion of Original:
+    - .slice
+  - Adding Original to Other:
+    - .concat
+  - Flattening the Original:
+    - .flat
+    - .flatMap
+- $$$ AN ARRAY INDEX $$$
+  - Based on Value:
+    - .indexOf
+  - Based on Test Condition:
+    - .findIndex
+- $$$ AN ARRAY ELEMENT $$$
+  - Based on Test Condition:
+    - .find
+- $$$ KNOW IF ARRAY INCLUDES $$$
+  - Based on Value:
+    - .includes
+  - Based on Test Condition:
+    - .some
+    - .every
+- $$$ A NEW STRING $$$
+  - Based on Separator String:
+    - .join
+- $$$ TO TRANSFORM TO VALUE $$$
+  - Based on Accumulator:
+    - .reduce
+- $$$ TO JUST LOOP ARRAY $$$
+  - Based on Callback
+    - .forEach
+- $$$  $$$
+  - 
+- $$$  $$$
